@@ -118,7 +118,7 @@ class Crawler:
         return url
 
     def process_page(self, url):
-        file_name = 'pages.warc.gz'
+        file_name = 'pages/pages.warc.gz'
         #self.warc_write_lock.acquire()
         try:
             with capture_http(file_name):
