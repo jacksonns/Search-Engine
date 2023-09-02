@@ -23,12 +23,12 @@ The crawler will store data from webpages on WARC files. To start crawling, the 
 
 ```bash
 cd crawler
-python3 main.py -s seeds.txt -n [NUMBER OF PAGES] [-d]
+python3 main.py -s seeds.txt -n N [-d]
 ```
 
-The ```-s``` argument is the .TXT file containing the seed URLs
+```-s``` argument is the .TXT file containing the seed URLs
 
-The ```-n``` argument is the number of pages to be crawled
+```-n``` argument is the number of pages to be crawled
 
-The ```-d``` argument is optional. If provided, activates verbose mode
+```-d``` argument is optional. If provided, activates verbose mode
 
