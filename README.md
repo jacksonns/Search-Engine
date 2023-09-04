@@ -32,3 +32,18 @@ python3 main.py -s seeds.txt -n N [-d]
 
 ```-d``` argument is optional. If provided, activates verbose mode
 
+
+## Indexer
+
+The indexer creates a file with the inverted index, storing tokens extracted from the corpus and its frequency on each document.
+
+```bash
+cd indexer
+python3 main.py -m 1024 -c path/to/corpus -i path/to/index.txt
+```
+
+```-m``` argument is the Memory Limit 
+
+```-c``` argument is the path to the directory containing the crawled WARC files
+
+```-i``` argument is the path to file where the index will be stored.
