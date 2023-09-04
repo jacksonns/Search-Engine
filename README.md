@@ -39,11 +39,11 @@ The indexer creates a file with the inverted index, storing tokens extracted fro
 
 ```bash
 cd indexer
-python3 main.py -m 1024 -c path/to/corpus -i path/to/index.txt
+python3 main.py -m 1024 -c path/to/corpus -i index.txt
 ```
 
 ```-m``` argument is the Memory Limit 
 
 ```-c``` argument is the path to the directory containing the crawled WARC files
 
-```-i``` argument is the path to file where the index will be stored.
+```-i``` argument is the file where the index will be stored.

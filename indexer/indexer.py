@@ -55,13 +55,17 @@ class Indexer:
         self.MAX_INDEX_SIZE = 0.5 * self.memory_limit * 1024
     
     def merge_urls(self):
-        url0 = open(self.path_to_urls + '/urls0.txt', 'a')
-        with open(self.path_to_urls + '/urls1.txt', 'r') as url1:
-            for line in url1:
-                url0.write(line)
-        url0.close()
-        os.replace(self.path_to_urls + '/urls0.txt', self.path_to_urls + '/urls.txt')
-        os.remove(self.path_to_urls + '/urls1.txt')
+        url_files = os.listdir(self.path_to_urls)
+        if len(url_files) == 1:
+            os.replace(self.path_to_urls + '/urls0.txt', self.path_to_urls + '/urls.txt')
+        else:
+            url0 = open(self.path_to_urls + '/urls0.txt', 'a')
+            with open(self.path_to_urls + '/urls1.txt', 'r') as url1:
+                for line in url1:
+                    url0.write(line)
+            url0.close()
+            os.replace(self.path_to_urls + '/urls0.txt', self.path_to_urls + '/urls.txt')
+            os.remove(self.path_to_urls + '/urls1.txt')
 
     def write_index_on_disk(self, process_id):
         self.partial_index_counter += 1
@@ -148,5 +152,6 @@ def run(path_to_corpus, path_to_index, memory_limit):
     indexer.merge_urls()
 
     index_size_bytes, lists_number, list_size = index_merge.get_data()
-
-    json_output(index_size_bytes / MEGABYTE, end - start, lists_number, list_size / lists_number)
+    
+    print('Index created successfully')
+    #json_output(index_size_bytes / MEGABYTE, end - start, lists_number, list_size / lists_number)

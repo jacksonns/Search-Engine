@@ -101,11 +101,20 @@ class IndexMerge:
         while(self.has_file_to_be_merged):
             self.set_file_list()
 
+            if len(self.file_list) == 1:
+                self.has_file_to_be_merged = False
+                file = self.file_list.pop()
+                merged_file = 'merged_{}.txt'.format(self.merge_level)
+                os.replace(os.path.join(self.path_to_partial_index, file), 
+                           os.path.join(self.path_to_partial_index,merged_file))
+                break
+
             if len(self.file_list) == 2: 
                 self.has_file_to_be_merged = False
                 threads = [Thread(target=self.merge_partial_indexes)]
-
-            threads = [Thread(target=self.merge_partial_indexes) for i in range(MAX_THREADS)]
+            else:
+                threads = [Thread(target=self.merge_partial_indexes) for i in range(MAX_THREADS)]
+            
             for t in threads:
                 t.start()
 
