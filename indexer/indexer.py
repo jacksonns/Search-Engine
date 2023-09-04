@@ -39,7 +39,7 @@ def init_worker():
     signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
-# Implementation of indexer
+# Implementation of Indexer
 class Indexer:
 
     def __init__(self, path_to_corpus, memory_limit):
@@ -98,7 +98,8 @@ class Indexer:
                     for record in tqdm(ArchiveIterator(stream), position=process_id, desc=file):
                         if record.rec_type == 'response':
                             url = record.rec_headers.get_header('WARC-Target-URI')
-                            body = record.raw_stream.read().decode('utf-8')
+                            #body = record.raw_stream.read().decode('utf-8')
+                            body = record.content_stream().read().decode('utf-8')
                             self.doc_id_counter = cont + (process_id * file_list_size * 10000)
                             self.create_index(url, body, process_id)
                             cont += 1
@@ -136,7 +137,7 @@ class Indexer:
 
 
 # Start indexer, then merge the partial indexes generated and outputs the index information
-def main(path_to_corpus, path_to_index, memory_limit):
+def run(path_to_corpus, path_to_index, memory_limit):
     indexer = Indexer(path_to_corpus, memory_limit)
     index_merge = IndexMerge(path_to_index, indexer.path_to_partial_indexes)
 
@@ -149,25 +150,3 @@ def main(path_to_corpus, path_to_index, memory_limit):
     index_size_bytes, lists_number, list_size = index_merge.get_data()
 
     json_output(index_size_bytes / MEGABYTE, end - start, lists_number, list_size / lists_number)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument(
-        '-m',
-        dest='memory_limit',
-        action='store',
-        required=True,
-        type=int,
-        help='memory available'
-    )
-    parser.add_argument('-c', '--corpus', required=True, help='Path to a directory containing the corpus WARC files')
-    parser.add_argument('-i', '--index', required=True, help='Path to the index file to be generated')
-    args = parser.parse_args()
-
-    memory_limit(args.memory_limit)
-    try:
-        main(args.corpus, args.index, args.memory_limit)
-    except MemoryError:
-        sys.stderr.write('\n\nERROR: Memory Exception\n')
-        sys.exit(1)
